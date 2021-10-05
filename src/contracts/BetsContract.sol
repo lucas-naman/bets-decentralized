@@ -17,13 +17,14 @@ contract BetsContract {
         uint256 timeBetClose;
         mapping(uint256 => Gamble) gambles;
         uint256 nbGambles;
+        bool closed;
     }
 
     string public name = "DApp Bets";
     TreatsToken public treatsToken;
     address public owner;
     mapping(uint256 => Bet) public bets;
-    uint256 nbBets;
+    uint256 public nbBets;
 
     constructor(TreatsToken _treatsToken) public {
         treatsToken = _treatsToken;
@@ -49,7 +50,8 @@ contract BetsContract {
         Bet memory bet;
         bet.teamA = _teamA;
         bet.teamB = _teamB;
-        bet.timeBetClose = _timeBetClose;
+        bet.closed = false;
+        bet.timeBetClose = now + (_timeBetClose * 1 minutes);
         bets[nbBets] = bet;
         nbBets += 1;
     }
@@ -60,6 +62,9 @@ contract BetsContract {
         uint256 _amount
     ) public {
         require(_amount > 0, "amount canot be 0");
+        require(bets[_idx].timeBetClose > now, "Bet participation are closed");
+        require(!bets[_idx].closed, "Bet participation are closed");
+        require(_idx < nbBets, "Bet participation are closed");
         treatsToken.transferFrom(msg.sender, address(this), _amount);
         Gamble memory gamble = Gamble({
             team: _team,
@@ -71,6 +76,8 @@ contract BetsContract {
     }
 
     function setBetWinner(uint256 _idx, bool _winner) public onlyOwner {
+        require(bets[_idx].closed, "Bet is over");
+        bets[_idx].closed = true;
         for (uint256 i = 0; i < bets[_idx].nbGambles; i++) {
             if (_winner == bets[_idx].gambles[i].team) {
                 uint256 amount = bets[_idx].gambles[i].amount;
