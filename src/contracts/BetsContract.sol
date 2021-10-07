@@ -15,8 +15,6 @@ contract BetsContract {
         uint256 amountA;
         uint256 amountB;
         uint256 timeBetClose;
-        mapping(uint256 => Gamble) gambles;
-        uint256 nbGambles;
         bool closed;
     }
 
@@ -24,6 +22,7 @@ contract BetsContract {
     TreatsToken public treatsToken;
     address public owner;
     mapping(uint256 => Bet) public bets;
+    mapping(uint256 => Gamble[]) public gambles;
     uint256 public nbBets;
 
     constructor(TreatsToken _treatsToken) public {
@@ -71,26 +70,32 @@ contract BetsContract {
             amount: _amount,
             gambler: msg.sender
         });
-        bets[_idx].gambles[bets[_idx].nbGambles] = gamble;
-        bets[_idx].nbGambles += 1;
+        gambles[_idx].push(gamble);
+        if (_team) {
+            bets[_idx].amountA += _amount;
+        } else {
+            bets[_idx].amountB += _amount;
+        }
     }
 
     function setBetWinner(uint256 _idx, bool _winner) public onlyOwner {
-        require(bets[_idx].closed, "Bet is over");
+        require(!bets[_idx].closed, "Bet is over");
         bets[_idx].closed = true;
-        for (uint256 i = 0; i < bets[_idx].nbGambles; i++) {
-            if (_winner == bets[_idx].gambles[i].team) {
-                uint256 amount = bets[_idx].gambles[i].amount;
-                if (_winner) {
-                    amount +=
-                        (bets[_idx].gambles[i].amount / bets[_idx].amountB) *
-                        bets[_idx].amountA;
-                } else {
-                    amount +=
-                        (bets[_idx].gambles[i].amount / bets[_idx].amountA) *
-                        bets[_idx].amountB;
+        for (uint256 i = 0; i < gambles[_idx].length; i++) {
+            if (_winner == gambles[_idx][i].team) {
+                uint256 amount = gambles[_idx][i].amount;
+                if (bets[_idx].amountA > 0 && bets[_idx].amountB > 0) {
+                    if (_winner) {
+                        amount +=
+                            (gambles[_idx][i].amount * bets[_idx].amountB) /
+                            bets[_idx].amountA;
+                    } else {
+                        amount +=
+                            (gambles[_idx][i].amount * bets[_idx].amountA) /
+                            bets[_idx].amountB;
+                    }
                 }
-                treatsToken.transfer(bets[_idx].gambles[i].gambler, amount);
+                treatsToken.transfer(gambles[_idx][i].gambler, amount);
             }
         }
     }
