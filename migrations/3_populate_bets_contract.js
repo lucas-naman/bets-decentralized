@@ -5,6 +5,10 @@ function tokens(n) {
     return web3.utils.toWei(n, 'Ether')
 }
 
+function myRand() {
+  return Math.floor(Math.random() * 20 + 1).toString()
+}
+
 module.exports = async function(deployer, network, accounts) {
   await deployer.deploy(TreatsToken)
   const treatsToken = await TreatsToken.deployed()
@@ -21,11 +25,29 @@ module.exports = async function(deployer, network, accounts) {
   console.log("Bets Created !")
   console.log("participating")
 
-  await treatsToken.approve(betsContract.address, tokens('10'), {from: accounts[0]})
-  await betsContract.participate(0, true, tokens('10'), {from: accounts[0]})
+  let amount = myRand()
+  await treatsToken.approve(betsContract.address, tokens(amount), {from: accounts[0]})
+  await betsContract.participate(0, true, tokens(amount), {from: accounts[0]})
 
-  await treatsToken.approve(betsContract.address, tokens('13'), {from: accounts[0]})
-  await betsContract.participate(0, false, tokens('13'), {from: accounts[0]})
+  amount = myRand()
+  await treatsToken.approve(betsContract.address, tokens(amount), {from: accounts[0]})
+  await betsContract.participate(0, false, tokens(amount), {from: accounts[0]})
+
+  amount = myRand()
+  await treatsToken.approve(betsContract.address, tokens(amount), {from: accounts[0]})
+  await betsContract.participate(1, false, tokens(amount), {from: accounts[0]})
+
+  amount = myRand()
+  await treatsToken.approve(betsContract.address, tokens(amount), {from: accounts[0]})
+  await betsContract.participate(1, true, tokens(amount), {from: accounts[0]})
+
+  amount = myRand()
+  await treatsToken.approve(betsContract.address, tokens(amount), {from: accounts[0]})
+  await betsContract.participate(2, false, tokens(amount), {from: accounts[0]})
+
+  amount = myRand()
+  await treatsToken.approve(betsContract.address, tokens(amount), {from: accounts[0]})
+  await betsContract.participate(2, true, tokens(amount), {from: accounts[0]})
 
   console.log('Done !')
 };
