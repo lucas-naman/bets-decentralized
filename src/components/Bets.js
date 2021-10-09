@@ -2,17 +2,19 @@ import React, { Component } from 'react'
 
 class Ratio extends Component {
 
+
   async componentWillMount() {
     this.setPercents()
   }
 
   setPercents() {
-    let amountA = Number(this.props.bet.amountA);
-    let amountB = Number(this.props.bet.amountB);
+    let amountA = Number(window.web3.utils.fromWei(this.props.bet.amountA, 'ether'))
+    let amountB = Number(window.web3.utils.fromWei(this.props.bet.amountB, 'ether'))
     let percentageA = 0
     let percentageB = 0
     if (amountA > 0 && amountB > 0) {
-
+      percentageA = Math.round(amountA / (amountA + amountB) * 100)
+      percentageB = 100 - percentageA
     } else if (amountA > 0) {
       percentageA = 100;
     } else if (amountB > 0) {
@@ -70,11 +72,11 @@ class Bets extends Component {
               this.state.bets.map((bet) => (
                   <tr key={bet.teamA + bet.teamB + bet.timeBetClose} >
                       <td>{bet.teamA}</td>
-                      <td>{bet.amountA}</td>
+                      <td>{window.web3.utils.fromWei(bet.amountA, 'ether')}</td>
                       <td>
                         <Ratio bet={bet} />
                       </td>
-                      <td>{bet.amountB}</td>
+                      <td>{window.web3.utils.fromWei(bet.amountB, 'ether')}</td>
                       <td>{bet.teamB}</td>
                   </tr>
               ))
