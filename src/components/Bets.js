@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ToggleButton from 'react-bootstrap/ToggleButton';
 
 class Ratio extends Component {
-
 
   async componentWillMount() {
     this.setPercents()
@@ -41,7 +42,7 @@ class Ratio extends Component {
 class Bets extends Component {
 
   async componentWillMount() {
-    this.setState({bets : [], show: false})
+    this.setState({bets : [], show: false, teamA: "", teamB: "", teamChosed: null, amount: null})
     this.getBets()
   }
 
@@ -53,6 +54,10 @@ class Bets extends Component {
       bets.push(bet)
     }
     this.setState({bets: bets})
+  }
+
+  openBetModal(teamA, teamB) {
+    this.setState({show: true, teamA: teamA, teamB: teamB, teamChosed: null, amount: 0})
   }
 
   render() {
@@ -82,7 +87,7 @@ class Bets extends Component {
                       <td>{window.web3.utils.fromWei(bet.amountB, 'ether')}</td>
                       <td>{bet.teamB}</td>
                       <td>
-                        <button type="button" className="btn btn-success btn-sm" onClick={() => this.setState({show: true})} >Bet</button>
+                        <button type="button" className="btn btn-success btn-sm" onClick={() => this.openBetModal(bet.teamA, bet.teamB)} >Bet</button>
                       </td>
                   </tr>
               ))
@@ -91,15 +96,40 @@ class Bets extends Component {
         </table>
         <Modal show={this.state.show} onHide={() => this.setState({show: false})}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Enter the Bet</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+          <Modal.Body>
+            <div>
+            <ButtonGroup>
+              <ToggleButton
+                type="radio"
+                variant="outline-primary"
+                name="radio"
+                value={true}
+                checked={this.state.teamChosed}
+                onChange={() => this.setState({teamChosed: true})}
+              >
+                {" " +this.state.teamA}
+              </ToggleButton>
+              <ToggleButton
+                type="radio"
+                variant="outline-danger"
+                name="radio"
+                value={false}
+                checked={this.state.teamChosed === false}
+                onChange={() => this.setState({teamChosed: false})}
+              >
+                {" " + this.state.teamB}
+              </ToggleButton>
+            </ButtonGroup>
+            </div>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => this.setState({show: false})}>
               Close
             </Button>
             <Button variant="primary" onClick={() => this.setState({show: false})}>
-              Save Changes
+              Bet
             </Button>
           </Modal.Footer>
         </Modal>
