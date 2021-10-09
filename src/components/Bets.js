@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 class Ratio extends Component {
 
@@ -39,7 +41,7 @@ class Ratio extends Component {
 class Bets extends Component {
 
   async componentWillMount() {
-    this.setState({bets : []})
+    this.setState({bets : [], show: false})
     this.getBets()
   }
 
@@ -65,6 +67,7 @@ class Bets extends Component {
               <th scope="col">Ratio</th>
               <th scope="col">Amount B</th>
               <th scope="col">Team B</th>
+              <th scope="col">Bet</th>
             </tr>
           </thead>
           <tbody>
@@ -78,11 +81,28 @@ class Bets extends Component {
                       </td>
                       <td>{window.web3.utils.fromWei(bet.amountB, 'ether')}</td>
                       <td>{bet.teamB}</td>
+                      <td>
+                        <button type="button" className="btn btn-success btn-sm" onClick={() => this.setState({show: true})} >Bet</button>
+                      </td>
                   </tr>
               ))
             }
           </tbody>
         </table>
+        <Modal show={this.state.show} onHide={() => this.setState({show: false})}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this.setState({show: false})}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={() => this.setState({show: false})}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
