@@ -65,22 +65,6 @@ class App extends Component {
     }
   }
 
-  // stakeTokens = (amount) => {
-  //   this.setState({ loading: true })
-  //   this.state.treatsToken.methods.approve(this.state.betsContract._address, amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-  //     this.state.betsContract.methods.stakeTokens(amount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-  //       this.setState({ loading: false })
-  //     })
-  //   })
-  // }
-
-  // unstakeTokens = (amount) => {
-  //   this.setState({ loading: true })
-  //   this.state.betsContract.methods.unstakeTokens().send({ from: this.state.account }).on('transactionHash', (hash) => {
-  //     this.setState({ loading: false })
-  //   })
-  // }
-
   constructor(props) {
     super(props)
     this.state = {
