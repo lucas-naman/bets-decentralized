@@ -42,7 +42,7 @@ class Ratio extends Component {
 class Bets extends Component {
 
   async componentWillMount() {
-    this.setState({bets : [], show: false, teamA: "", teamB: "", teamChosed: null, amount: null})
+    this.setState({bets : [], show: false, teamA: "", teamB: "", teamChosed: null, amount: 1})
     this.getBets()
   }
 
@@ -57,7 +57,22 @@ class Bets extends Component {
   }
 
   openBetModal(teamA, teamB) {
-    this.setState({show: true, teamA: teamA, teamB: teamB, teamChosed: null, amount: 0})
+    this.setState({show: true, teamA: teamA, teamB: teamB, teamChosed: null, amount: 1})
+  }
+
+  bet() {
+    if (this.state.amount >= 1 && this.state.teamChosed != null) {
+      let teamBet = this.state.teamChosed ? this.state.teamA : this.state.teamB
+      let oponent = this.state.teamChosed ? this.state.teamB : this.state.teamA
+      var answer = window.confirm('Are you sure you want to bet ' + this.state.amount + ' Treats on ' + teamBet + ' on their match vs ' + oponent + ' ?');
+      if (answer) {
+          
+          this.setState({show: false})
+      }
+      else {
+          //some code
+      }
+    }
   }
 
   render() {
@@ -99,7 +114,6 @@ class Bets extends Component {
             <Modal.Title>Enter the Bet</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div>
             <ButtonGroup>
               <ToggleButton
                 type="radio"
@@ -122,13 +136,25 @@ class Bets extends Component {
                 {" " + this.state.teamB}
               </ToggleButton>
             </ButtonGroup>
+            <br />
+            <div className="input-group mb-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text" id="inputGroup-sizing-default">Treats Amount</span>
+              </div>
+              <input type="number" 
+                className="form-control"
+                onChange={(event) => this.setState({amount: event.target.value})}
+                value={this.state.amount}
+                min="1" max="100" 
+                aria-label="Default" 
+                aria-describedby="inputGroup-sizing-default" />
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => this.setState({show: false})}>
+            <Button variant="warning" onClick={() => this.setState({show: false})}>
               Close
             </Button>
-            <Button variant="primary" onClick={() => this.setState({show: false})}>
+            <Button variant="success" onClick={() => this.bet()}>
               Bet
             </Button>
           </Modal.Footer>
