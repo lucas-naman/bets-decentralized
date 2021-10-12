@@ -16,6 +16,20 @@ class Navbar extends Component {
         <ul className="navbar-nav px-3">
           <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
             <small className="text-secondary">
+              <small>ETH: &nbsp;
+                {window.web3.utils.fromWei(this.props.ethTokenBalance, 'ether')}
+              </small>
+            </small>
+          </li>
+          <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
+            <small className="text-light">
+              <small>TRT: &nbsp;
+                {window.web3.utils.fromWei(this.props.treatsTokenBalance, 'ether')}
+              </small>
+            </small>
+          </li>
+          <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
+            <small className="text-secondary">
               <small id="account">{this.props.account}</small>
             </small>
           </li>

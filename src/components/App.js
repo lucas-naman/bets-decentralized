@@ -30,6 +30,9 @@ class App extends Component {
 
     const networkId = await web3.eth.net.getId()
 
+    web3.eth.getBalance(this.state.account).then(balance => {
+      this.setState({ethTokenBalance: balance})
+    });
     // Load TreatsToken
     const treatsTokenData = TreatsToken.networks[networkId]
     if(treatsTokenData) {
@@ -72,6 +75,7 @@ class App extends Component {
       treatsToken: {},
       betsContract: {},
       treatsTokenBalance: '0',
+      ethTokenBalance: '0',
       loading: true
     }
   }
@@ -89,15 +93,15 @@ class App extends Component {
           <Pool {...this.state}/>
         </Route>
         <Route path="/">
-          <Bets treatsTokenBalance={this.state.treatsTokenBalance} betsContract={this.state.betsContract} />
+          <Bets treatsTokenBalance={this.state.treatsTokenBalance} betsContract={this.state.betsContract} {...this.state} />
         </Route>
       </Switch>
     }
     return (
       <div>
         <Router>
-          <Navbar account={this.state.account} />
-          <div className="container-fluid mt-5">
+          <Navbar account={this.state.account} treatsTokenBalance={this.state.treatsTokenBalance} ethTokenBalance={this.state.ethTokenBalance} />
+          <div className="container-fluid" style={{ marginTop: "100px"}}>
             <div className="row">
               <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '600px' }}>
                 <div className="content mr-auto ml-auto">
