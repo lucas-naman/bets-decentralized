@@ -1,9 +1,10 @@
 require('babel-register');
 require('babel-polyfill');
+var secrets = require('./secrets.json');
 
- const HDWalletProvider = require('@truffle/hdwallet-provider');
- const infuraKey = '23423423424242342342';
- const mnemonic = 'royal can ocean craft spice enough leave warrior effort human life law';
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const infuraKey = secrets.project_id;
+const mnemonic = secrets.mnemonic;
 
 module.exports = {
 
