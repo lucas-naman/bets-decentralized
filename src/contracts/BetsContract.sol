@@ -1,5 +1,5 @@
-pragma solidity ^0.5.0;
-
+pragma solidity >=0.7.0 <0.9.0;
+// SPDX-License-Identifier: MIT
 import "./TreatsToken.sol";
 
 contract BetsContract {
@@ -25,7 +25,7 @@ contract BetsContract {
     mapping(uint256 => Gamble[]) public gambles;
     uint256 public nbBets;
 
-    constructor(TreatsToken _treatsToken) public {
+    constructor(TreatsToken _treatsToken) {
         treatsToken = _treatsToken;
         owner = msg.sender;
         nbBets = 0;
@@ -50,7 +50,7 @@ contract BetsContract {
         bet.teamA = _teamA;
         bet.teamB = _teamB;
         bet.closed = false;
-        bet.timeBetClose = now + (_timeBetClose * 1 minutes);
+        bet.timeBetClose = block.timestamp + (_timeBetClose * 1 minutes);
         bets[nbBets] = bet;
         nbBets += 1;
     }
@@ -61,7 +61,10 @@ contract BetsContract {
         uint256 _amount
     ) public {
         require(_amount > 0, "amount canot be 0");
-        require(bets[_idx].timeBetClose > now, "Bet participation are closed");
+        require(
+            bets[_idx].timeBetClose > block.timestamp,
+            "Bet participation are closed"
+        );
         require(!bets[_idx].closed, "Bet participation are closed");
         require(_idx < nbBets, "Bet participation are closed");
         treatsToken.transferFrom(msg.sender, address(this), _amount);
