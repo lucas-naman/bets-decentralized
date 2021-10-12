@@ -4,6 +4,10 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 
+function tokens(n) {
+  return window.web3.utils.toWei(n, 'Ether')
+}
+
 class Ratio extends Component {
 
   async componentWillMount() {
@@ -42,7 +46,7 @@ class Ratio extends Component {
 class Bets extends Component {
 
   async componentWillMount() {
-    this.setState({bets : [], show: false, teamA: "", teamB: "", teamChosed: null, amount: 1})
+    this.setState({bets : [], show: false, teamA: "", teamB: "", teamChosed: null, amount: 1, betId: null})
     this.getBets()
   }
 
@@ -56,8 +60,8 @@ class Bets extends Component {
     this.setState({bets: bets})
   }
 
-  openBetModal(teamA, teamB) {
-    this.setState({show: true, teamA: teamA, teamB: teamB, teamChosed: null, amount: 1})
+  openBetModal(teamA, teamB, id) {
+    this.setState({show: true, teamA: teamA, teamB: teamB, teamChosed: null, amount: 1, betId: id})
   }
 
   bet() {
@@ -66,8 +70,12 @@ class Bets extends Component {
       let oponent = this.state.teamChosed ? this.state.teamB : this.state.teamA
       var answer = window.confirm('Are you sure you want to bet ' + this.state.amount + ' Treats on ' + teamBet + ' on their match vs ' + oponent + ' ?');
       if (answer) {
-          
-          this.setState({show: false})
+			this.props.treatsToken.methods.approve(this.props.betsContract._address, tokens(this.state.amount.toString())).send({ from: this.props.account }).on('transactionHash', (hash) => {
+				this.props.betsContract.methods.participate(this.state.betId, this.state.teamChosed, tokens(this.state.amount.toString())).send({ from: this.props.account }).on('transactionHash', (hash) => {
+          this.getBets()
+					this.setState({show: false})
+				})
+			})
       }
       else {
           //some code
@@ -92,20 +100,20 @@ class Bets extends Component {
           </thead>
           <tbody>
             {
-              this.state.bets.map((bet) => (
-                  <tr key={bet.teamA + bet.teamB + bet.timeBetClose} >
-                      <td>{bet.teamA}</td>
-                      <td>{window.web3.utils.fromWei(bet.amountA, 'ether')}</td>
-                      <td>
-                        <Ratio bet={bet} />
-                      </td>
-                      <td>{window.web3.utils.fromWei(bet.amountB, 'ether')}</td>
-                      <td>{bet.teamB}</td>
-                      <td>
-                        <button type="button" className="btn btn-success btn-sm" onClick={() => this.openBetModal(bet.teamA, bet.teamB)} >Bet</button>
-                      </td>
-                  </tr>
-              ))
+				this.state.bets.map((bet, idx) => (
+					<tr key={bet.teamA + bet.teamB + bet.timeBetClose} >
+						<td>{bet.teamA}</td>
+						<td>{window.web3.utils.fromWei(bet.amountA, 'ether')}</td>
+						<td>
+							<Ratio bet={bet} />
+						</td>
+						<td>{window.web3.utils.fromWei(bet.amountB, 'ether')}</td>
+						<td>{bet.teamB}</td>
+						<td>
+							<button type="button" className="btn btn-success btn-sm" onClick={() => this.openBetModal(bet.teamA, bet.teamB, idx)} >Bet</button>
+						</td>
+					</tr>
+				))
             }
           </tbody>
         </table>
