@@ -19,6 +19,8 @@ contract('BetsContract', (accounts) => {
         treatsToken = await TreatsToken.new()
         betsContract = await BetsContract.new(treatsToken.address)
 
+        treatsToken.mint(accounts[0],'1000000000000000000000000000');
+
         await treatsToken.transfer(accounts[1], tokens('1000'), {from: accounts[0]})
         await treatsToken.transfer(accounts[2], tokens('1000'), {from: accounts[0]})
         await treatsToken.transfer(accounts[3], tokens('1000'), {from: accounts[0]})
@@ -28,7 +30,7 @@ contract('BetsContract', (accounts) => {
     describe('Treats Deployment', async () => {
         it('has a name', async () => {
             const name = await treatsToken.name()
-            assert.equal(name, 'Treats Token')
+            assert.equal(name, 'TreatsToken')
         })
     })
 
