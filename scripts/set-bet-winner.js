@@ -21,12 +21,6 @@ module.exports = async function(callback) {
     
         console.log("Setting winner")
     
-        process.argv.forEach((val, index) => {
-            if (index > 3) {
-                
-            }
-            console.log(`${index}: ${val}`);
-        });
         await betsContract.setBetWinner(process.argv[4], process.argv[5])
     
         console.log('Done !')
