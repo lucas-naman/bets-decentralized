@@ -103,7 +103,7 @@ class App extends Component {
           <Navbar account={this.state.account} treatsTokenBalance={this.state.treatsTokenBalance} ethTokenBalance={this.state.ethTokenBalance} />
           <div className="container-fluid" style={{ marginTop: "100px"}}>
             <div className="row">
-              <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '600px' }}>
+              <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '800px' }}>
                 <div className="content mr-auto ml-auto">
                   <a
                     href="#"
