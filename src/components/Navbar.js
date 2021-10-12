@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
 import farmer from '../assets/farmer.png'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 class Navbar extends Component {
 
@@ -11,6 +17,17 @@ class Navbar extends Component {
         >
           <img src={farmer} width="30" height="30" className="d-inline-block align-top" alt="" />
           &nbsp; DApp E-Sports Bets
+        </div>
+        <div>
+          <Link className="text-light" to="/">Bets</Link>
+        </div>
+
+        <div>
+          <Link className="text-light" to="/roulette">Roulette</Link>
+        </div>
+
+        <div>
+          <Link className="text-light" to="/liquidity-pool">Swap</Link>
         </div>
 
         <ul className="navbar-nav px-3">

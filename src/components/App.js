@@ -86,10 +86,10 @@ class App extends Component {
       content = <h1 id="loader">Loading...</h1>
     } else {
       content = <Switch>
-        <Route path="/wallet">
+        <Route path="/roulette">
           <Wallet {...this.state} />
         </Route>
-        <Route path="/pool">
+        <Route path="/liquidity-pool">
           <Pool {...this.state}/>
         </Route>
         <Route path="/">
