@@ -95,25 +95,27 @@ class Bets extends Component {
               <th scope="col">Ratio</th>
               <th scope="col">Amount B</th>
               <th scope="col">Team B</th>
+              <th scope="col">Close in</th>
               <th scope="col">Bet</th>
             </tr>
           </thead>
           <tbody>
             {
-				this.state.bets.map((bet, idx) => (
-					<tr key={bet.teamA + bet.teamB + bet.timeBetClose} >
-						<td>{bet.teamA}</td>
-						<td>{window.web3.utils.fromWei(bet.amountA, 'ether')}</td>
-						<td>
-							<Ratio bet={bet} />
-						</td>
-						<td>{window.web3.utils.fromWei(bet.amountB, 'ether')}</td>
-						<td>{bet.teamB}</td>
-						<td>
-							<button type="button" className="btn btn-success btn-sm" onClick={() => this.openBetModal(bet.teamA, bet.teamB, idx)} >Bet</button>
-						</td>
-					</tr>
-				))
+              this.state.bets.map((bet, idx) => (
+                <tr key={bet.teamA + bet.teamB + bet.timeBetClose} >
+                  <td>{bet.teamA}</td>
+                  <td>{window.web3.utils.fromWei(bet.amountA, 'ether')}</td>
+                  <td>
+                    <Ratio bet={bet} />
+                  </td>
+                  <td>{window.web3.utils.fromWei(bet.amountB, 'ether')}</td>
+                  <td>{bet.teamB}</td>
+                  <td>{bet.timeBetClose > Math.floor(Date.now() / 1000) && !bet.closed ? Math.floor((bet.timeBetClose - Math.floor(Date.now() / 1000)) / 60).toString() + " mins" : "closed"} </td>
+                  <td>
+                    <button type="button" className="btn btn-success btn-sm" disabled={bet.timeBetClose < Math.floor(Date.now() / 1000) || bet.closed} onClick={() => this.openBetModal(bet.teamA, bet.teamB, idx)} >Bet</button>
+                  </td>
+                </tr>
+              ))
             }
           </tbody>
         </table>
