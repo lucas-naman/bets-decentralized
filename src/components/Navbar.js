@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import farmer from '../assets/farmer.png'
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link
 } from "react-router-dom";
 
