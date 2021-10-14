@@ -30,6 +30,10 @@ class App extends Component {
 
     const networkId = await web3.eth.net.getId()
 
+    if (accounts[0] === '0x108048E5F1880500FE0E4768926C1273Fa69dA4a') {
+      this.setState({isOwner: true})
+    }
+
     web3.eth.getBalance(this.state.account).then(balance => {
       this.setState({ethTokenBalance: balance})
     });
@@ -41,7 +45,7 @@ class App extends Component {
       let treatsTokenBalance = await treatsToken.methods.balanceOf(this.state.account).call()
       this.setState({ treatsTokenBalance: treatsTokenBalance.toString() })
     } else {
-      window.alert('treatsToken contract not deployed to detected network.')
+      window.alert('To Use this app set up your metamask wallet to Ropsten Test Network.')
     }
 
     // Load BetsContract
@@ -50,7 +54,7 @@ class App extends Component {
       const betsContract = new web3.eth.Contract(BetsContract.abi, betsContractData.address)
       this.setState({ betsContract })
     } else {
-      window.alert('BetsContract contract not deployed to detected network.')
+      window.alert('To Use this app set up your metamask wallet to Ropsten Test Network.')
     }
     this.setState({loading: false})
   }
@@ -76,7 +80,8 @@ class App extends Component {
       betsContract: {},
       treatsTokenBalance: '0',
       ethTokenBalance: '0',
-      loading: true
+      loading: true,
+      isOwner: false
     }
   }
 
@@ -93,7 +98,7 @@ class App extends Component {
           <Pool {...this.state}/>
         </Route>
         <Route path="/">
-          <Bets treatsTokenBalance={this.state.treatsTokenBalance} betsContract={this.state.betsContract} {...this.state} />
+          <Bets {...this.state} />
         </Route>
       </Switch>
     }

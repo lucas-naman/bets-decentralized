@@ -5,7 +5,8 @@ class Pool extends Component {
   render() {
     return (
       <div>
-          <p>To get TreatsTokens and start betting go to uniswap on the <strong>Ropsten</strong> network and trade ETH against TreatsTokens.</p>
+          <p>To get TreatsTokens and start betting:</p>
+          <p>Go to uniswap on the <strong>Ropsten</strong> network and trade ETH against TreatsTokens.</p>
           <p>Dont forget to add TreatsTokens to your metamask wallet</p>
           <br />
           <p>Uniswap link: <a target="_blank" href="https://app.uniswap.org/#/swap">Uniswap</a></p>

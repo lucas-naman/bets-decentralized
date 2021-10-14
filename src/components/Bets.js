@@ -46,7 +46,7 @@ class Ratio extends Component {
 class Bets extends Component {
 
   async componentWillMount() {
-    this.setState({bets : [], show: false, teamA: "", teamB: "", teamChosed: null, amount: 1, betId: null})
+    this.setState({bets : [], show: false, teamA: "", teamB: "", teamChosed: null, amount: 1, betId: null, newBetA: "" , newBetB: "", newBetCloseIn: 90})
     this.getBets()
   }
 
@@ -83,10 +83,32 @@ class Bets extends Component {
     }
   }
 
+  createBet() {
+    this.props.betsContract.methods.createBet(this.state.newBetA, this.state.newBetB, this.state.newBetCloseIn).send({ from: this.props.account }).on('transactionHash', (hash) => {
+      this.setState({newBetA: "", newBetB: "", newBetCloseIn: 90})
+      this.getBets()
+    })
+  }
+
   render() {
 
     return (
       <div>
+        <form className={this.props.isOwner ? undefined : 'hidden'}>
+          <label>
+            TeamA :
+            <input type="text" onChange={(event) => this.setState({newBetA: event.target.value})} />
+          </label>
+          <label>
+            TeamB :
+            <input type="text" onChange={(event) => this.setState({newBetB: event.target.value})} />
+          </label>
+          <label>
+            Close in :
+            <input type="number" value={this.state.newBetCloseIn} onChange={(event) => this.setState({newBetCloseIn: event.target.value})}/>
+          </label>
+          <button type="button" className="btn btn-success btn-sm" onClick={() => this.createBet()} >Create Bet</button>
+        </form>
         <table className="table table-dark">
           <thead>
             <tr>

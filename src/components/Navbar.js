@@ -22,9 +22,9 @@ class Navbar extends Component {
           <Link className="text-light" to="/">Bets</Link>
         </div>
 
-        <div>
+        {/* <div>
           <Link className="text-light" to="/roulette">Roulette</Link>
-        </div>
+        </div> */}
 
         <div>
           <Link className="text-light" to="/liquidity-pool">Swap</Link>
