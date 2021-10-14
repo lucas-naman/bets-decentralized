@@ -109,12 +109,6 @@ class App extends Component {
             <div className="row">
               <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '800px' }}>
                 <div className="content mr-auto ml-auto">
-                  <a
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                  </a>
 
                   {content}
 
